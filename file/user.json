@@ -1,0 +1,17 @@
+  
+{
+    "task" : "add",
+    "operation" : {
+        "table" : "apidata",
+        "data" : {
+            "name": "ram",
+            "phone":"123456897",
+            "message":"hello ram"
+        },
+        "show" : {
+            "name":"name",
+            "phone":"phone",
+            "message":"message"
+        }
+    }
+}

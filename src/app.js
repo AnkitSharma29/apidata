@@ -2,39 +2,45 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 8000;
 const mysqlConnection = require("./db/connection");
+const data = require("../file/user.json")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/data", (req, res) => {
     
-    mysqlConnection.query("SELECT * FROM apidata", (err, result) => {
-      if (err) throw err;
-  
-      if (result == 0) {
-        res.send("Data not found");
-      } else {
-        res.send(result);
-      }
-    });
+  if(data) {
+
+        mysqlConnection.query(`SELECT ${data.operation.show.name},${data.operation.show.phone},${data.operation.show.message} FROM ${data.operation.table}`, (err, result) => {
+          if (err) throw err;
+      
+          if (result == 0) {
+            res.send("Data not found");
+          } else {
+            res.send(result);
+          }
+        });
+    }else{
+      res.send("Data not found");
+    }
   });
 
-  app.post("/register", (req, res) => {
+  app.get("/register", (req, res) => {
 
-    const name = req.body.name;
-    const phone = req.body.phone;
-    const message = req.body.message;
+    if(data) {
 
-
-    mysqlConnection.query("INSERT INTO apidata (name,phone,message) VALUES(?,?,?)",[name,phone,message], (err, result) => {
-      if (err) throw err;
-  
-      if (result == 0) {
-        res.send("Data not found");
-      } else {
-        res.send("data insert");
-      }
-    });
+        mysqlConnection.query(`INSERT INTO ${data.operation.table} SET ?`,data.operation.data, (err, result) => {
+          if (err) throw err;
+      
+          if (result == 0) {
+            res.send("Data not found");
+          } else {
+            res.send("data insert");
+          }
+        });
+    }else{
+      res.send("Data not found");
+    }
   });
 
 
